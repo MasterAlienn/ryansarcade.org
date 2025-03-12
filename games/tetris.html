@@ -6,29 +6,29 @@
     <meta name="google-adsense-account" content="ca-pub-2621540780997495">
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" href="../lib/favicon.ico">
-    <title>Snake - Ryan's Arcade</title>
+    <title>Tetris - Ryan's Arcade</title>
 </head>
 <body>
     <header>
         <a href="ryansarcade.org">
             <img class="logo" src="../lib/favicon.ico" alt="home">
         </a>
-        <h1>Snake</h1>
+        <h1>Tetris</h1>
     </header>
     <script>
-        var char;
-        var apple;
+        var blocks = [
+            
+        ]
         function startGame() {
             myGameArea.start();
-            char = new component(30, 30, "green", 135, 235);
-            apple = new component(30, 30, "red", 335, 235);
+            char = new component(20, 20, "green", 100, 200);
         }
         var myGameArea = {
             canvas : document.createElement("canvas"),
             start : function() {
-                this.canvas.classList.add("snake")
-                this.canvas.width = 500;
-                this.canvas.height = 500;
+                this.canvas.classList.add("tetris")
+                this.canvas.width = 200;
+                this.canvas.height = 420;
                 this.context = this.canvas.getContext("2d");
                 document.body.insertBefore(this.canvas, document.body.childNodes[2]);
                 this.interval = setInterval(updateGameArea, 20);
@@ -65,20 +65,19 @@
         }
         function updateGameArea() {
             myGameArea.clear();
-            char.update();
-            apple.update();
+            block.update()
         }
         function moveUp() {
-            char.speedY += 1;
+            char.speedY += 20;
         }
         function moveDown() {
-            char.speedY -= 1;
+            char.speedY -= 20;
         }
         function moveLeft() {
-            char.speedX -= 1;
+            char.speedX -= 20;
         }
         function moveRight() {
-            char.speedX += 1;
+            char.speedX += 20;
         }
         startGame();
     </script>
