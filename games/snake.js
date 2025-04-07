@@ -9,10 +9,10 @@ let moveUp = false;
 let moveDown = false;
 let moveLeft = false;
 let moveRight = false;
-let x = 20 * 10;
-let y = (canvas.height / 2);
+let x = 100;
+let y = (canvas.height / 2) - sHeight / 2;
 let ax = canvas.width - (canvas.width - aRadius) / 4;
-let ay = (canvas.height / 2);
+let ay = canvas.height / 2;
 function drawApple() {
     ctx.beginPath();
     ctx.arc(ax, ay, aRadius, 0, Math.PI * 2, false);
@@ -21,14 +21,7 @@ function drawApple() {
     ctx.closePath();
 }
 // test, delete when done (ctrl + shift + l, ctrl + l x2, backspace)
-function drawSPos() {ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2, false); ctx.fillStyle = "#0000ff"; ctx.fill();ctx.closePath();}
-function drawLine() {
-    ctx.beginPath();
-    ctx.rect(0, (canvas.height / 2) + 1, canvas.width, 1);
-    ctx.fillStyle = "#ffffff";
-    ctx.fill();
-    ctx.closePath();
-}
+function drawSPos() {ctx.beginPath();ctx.arc(x, y, 3, 0, Math.PI * 2, false);ctx.fillStyle = "#0000ff";ctx.fill();ctx.closePath();}
 function drawSnake() {
     ctx.beginPath();
     ctx.rect(x, y, sWidth, sHeight);
@@ -42,7 +35,7 @@ function draw() {
     drawSnake();
     // test, delete when done (ctrl + shift + l, ctrl + l x2, backspace)
     drawSPos();
-    drawLine();
+    // movement
     if (moveUp) {
         y -= 20;
     }
@@ -55,6 +48,7 @@ function draw() {
     if (moveRight) {
         x += 20;
     }
+    // highscore handling
     if (x > ax && x < ax && y > ay && y < ay) {
         score += 1;
         if (score > highScore) {
@@ -62,10 +56,15 @@ function draw() {
             localStorage.setItem("highScore", String(score));
         }
     }
-    if (x + sWidth < 0 || x > canvas.width + sWidth || y + sHeight < 0 || y > canvas.height - sHeight) {
+    // death handling
+    if (x < 0 || x > canvas.width - sWidth || y < 0 || y == canvas.height) {
         alert("GAME OVER");
         document.location.reload();
         clearInterval(interval);
+    }
+    // apple collision
+    if () {
+        score++;
     }
 }
 document.addEventListener("keydown", keyDownManager, false);
