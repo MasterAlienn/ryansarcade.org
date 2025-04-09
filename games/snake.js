@@ -20,8 +20,6 @@ function drawApple() {
     ctx.fill();
     ctx.closePath();
 }
-// test, delete when done (ctrl + shift + l, ctrl + l x2, backspace)
-function drawSPos() {ctx.beginPath();ctx.arc(x, y, 3, 0, Math.PI * 2, false);ctx.fillStyle = "#0000ff";ctx.fill();ctx.closePath();}
 function drawSnake() {
     ctx.beginPath();
     ctx.rect(x, y, sWidth, sHeight);
@@ -33,8 +31,6 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawApple();
     drawSnake();
-    // test, delete when done (ctrl + shift + l, ctrl + l x2, backspace)
-    drawSPos();
     // movement
     if (moveUp) {
         y -= 20;
