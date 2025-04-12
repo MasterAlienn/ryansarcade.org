@@ -52,19 +52,26 @@ function draw() {
     if (x > ax && x < ax && y > ay && y < ay) {
         score += 1;
         if (score > highScore) {
+            newHS = true;
             highScore = score;
             localStorage.setItem("highScore", String(score));
         }
     }
-    // death handling
+    // death handling/messages
     if (x < 0 || x > canvas.width - sWidth || y < 0 || y == canvas.height) {
-        alert("GAME OVER");
+        if (newHS) {
+            alert("GAME OVER\nNew High Score: " + String(score));
+        } else {
+            alert("GAME OVER\nScore: " + String(score) + "\nHigh Score: " + String(highScore));
+        }
         document.location.reload();
         clearInterval(interval);
     }
     // apple collision
-    if () {
+    if (x + sWidth == ax && y + sHeight == ay) {
         score++;
+        ax = canvas.width;
+        ay = canvas.height;
     }
 }
 document.addEventListener("keydown", keyDownManager, false);
