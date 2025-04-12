@@ -1,14 +1,15 @@
 const canvas = document.getElementsByClassName("snake")[0];
 const ctx = canvas.getContext("2d");
 let highScore = Number(localStorage.getItem("highScore"));
+let dirChanged = false;
 let sWidth = 20;
 let sHeight = 20;
 let aRadius = 10;
-let score = 0;
 let moveUp = false;
 let moveDown = false;
 let moveLeft = false;
 let moveRight = false;
+let score = 0;
 let x = 100;
 let y = (canvas.height / 2) - sHeight / 2;
 let ax = canvas.width - (canvas.width - aRadius) / 4;
@@ -20,8 +21,6 @@ function drawApple() {
     ctx.fill();
     ctx.closePath();
 }
-// test, delete when done (ctrl + shift + l, ctrl + l x2, backspace)
-function drawSPos() {ctx.beginPath();ctx.arc(x, y, 3, 0, Math.PI * 2, false);ctx.fillStyle = "#0000ff";ctx.fill();ctx.closePath();}
 function drawSnake() {
     ctx.beginPath();
     ctx.rect(x, y, sWidth, sHeight);
@@ -29,24 +28,26 @@ function drawSnake() {
     ctx.fill();
     ctx.closePath();
 }
+function aReset() {
+    ax = (Math.floor(Math.random() * (canvas.width / 2)) + 1) * sWidth + 10
+    ay = (Math.floor(Math.random() * (canvas.height / 2)) + 1) * sHeight + 10 
+}
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawApple();
     drawSnake();
-    // test, delete when done (ctrl + shift + l, ctrl + l x2, backspace)
-    drawSPos();
     // movement
     if (moveUp) {
-        y -= 20;
+        y -= sHeight;
     }
     if (moveDown) {
-        y += 20;
+        y += sHeight;
     }
     if (moveLeft) {
-        x -= 20;
+        x -= sWidth;
     }
     if (moveRight) {
-        x += 20;
+        x += sWidth;
     }
     // highscore handling
     if (x > ax && x < ax && y > ay && y < ay) {
@@ -68,37 +69,43 @@ function draw() {
         clearInterval(interval);
     }
     // apple collision
-    if (x + sWidth == ax && y + sHeight == ay) {
+    if (ax - sWidth / 2 == x && ay - sHeight / 2 == y) {
+        aReset();
         score++;
         ax = canvas.width;
         ay = canvas.height;
     }
 }
 document.addEventListener("keydown", keyDownManager, false);
+// prevent 2 keypresses in 1 frame
 function keyDownManager(e) {
     if (e.key == "Up" || e.key == "w" && !moveDown || e.key == "ArrowUp" && !moveDown) {
         moveUp = true;
         moveDown = false;
         moveLeft = false;
         moveRight = false;
+        dirChanged = true
     }
     if (e.key == "Down" || e.key == "s" && !moveUp || e.key == "ArrowDown" && !moveUp) {
         moveDown = true;
         moveUp = false;
         moveLeft = false;
         moveRight = false;
+        dirChanged = true
     }
     if (e.key == "Left" || e.key == "a" && !moveRight || e.key == "ArrowLeft" && !moveRight) {
         moveLeft = true;
         moveDown = false;
         moveUp = false;
         moveRight = false;
+        dirChanged = true
     }
     if (e.key == "Right" || e.key == "d" && !moveLeft || e.key == "ArrowRight" && !moveLeft) {
         moveRight = true;
         moveDown = false;
         moveLeft = false;
         moveUp = false;
+        dirChanged = true
     }
 }
 interval = setInterval(draw, 100);
