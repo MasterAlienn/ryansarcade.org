@@ -12,8 +12,8 @@ let moveLeft = false;
 let moveRight = false;
 let score = 0;
 let x = 100;
-let y = (canvas.height / 2) - sHeight / 2;
-let ax = (canvas.width / 20) / 4 * 3 * 20;
+let y = canvas.height / 2 - sHeight / 2;
+let ax = canvas.width / sWidth * 0.75 * 20;
 let ay = canvas.height / 2;
 function drawApple() {
     ctx.beginPath();
@@ -30,8 +30,8 @@ function drawSnake() {
     ctx.closePath();
 }
 function aReset() {
-    ax = (Math.floor(Math.random() * (canvas.width / sWidth)) + 1) * 20 + 10;
-    ay = (Math.floor(Math.random() * (canvas.height / sHeight)) + 1) * 20 + 10; 
+    ax = (Math.floor(Math.random() * (canvas.width / sWidth)) + 1) * 20 - 10;
+    ay = (Math.floor(Math.random() * (canvas.height / sHeight)) + 1) * 20 - 10; 
 }
 function draw() {
     dirChanged = false;
@@ -74,7 +74,6 @@ function draw() {
     }
 }
 document.addEventListener("keydown", keyDownManager, false);
-// prevent 2 keypresses in 1 frame
 function keyDownManager(e) {
     if (e.key == "Up" && !moveDown && !dirChanged || e.key == "w" && !moveDown && !dirChanged || e.key == "ArrowUp" && !moveDown && !dirChanged) {
         moveUp = true;
@@ -103,6 +102,10 @@ function keyDownManager(e) {
         moveLeft = false;
         moveUp = false;
         dirChanged = true
+    }
+    // remove before publish
+    if (e.key == "Escape") {
+        clearInterval(interval);
     }
 }
 interval = setInterval(draw, 100);
