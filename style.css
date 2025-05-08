@@ -7,12 +7,16 @@ header {
     text-align: center;
     align-items: center;
     height: 70px;
+    display: flex;
+    flex-direction: row;
 }
 h1 {
     text-align: center;
     font-size: 70px;
+    margin: auto;
     margin-top: 20px;
     width: 500px;
+    float: none;
 }
 div {
     text-align: center;
@@ -23,7 +27,7 @@ div {
 }
 a {
     color: #f2f2f2;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
 }
 img {
@@ -33,14 +37,34 @@ canvas {
     padding: auto;
 }
 .logo {
-    width: 70px;
+    width: 90px;
+    float: left;
 }
 .logoA {
+    margin-top: 35px;
     width: 70px;
 }
 .tetris {
-    background: #4444ff;
+    background: #44f;
 }
 .snake {
-    background: #000000;
+    background: #000;
+}
+.homeNavDiv {
+    border-bottom-width: 2px;
+    border-bottom-color: #111;
+}
+.br {
+    display: none;
+}
+@media (max-width: 800px) {
+    header {
+        flex-direction: column;
+    }
+    .logo {
+        float: none;
+    }
+    .br {
+        display: block;
+    }
 }
