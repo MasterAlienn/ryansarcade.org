@@ -10,12 +10,13 @@ let moveUp = false;
 let moveDown = false;
 let moveLeft = false;
 let moveRight = false;
+let oTiles;
 let score = 0;
 let sKey;
 let paused = false;
 let x = 100;
 let y = canvas.height / 2 - sHeight / 2;
-let snake = [{x:x, y:y}];
+let snakeArr = [{x:x, y:y}];
 let ax = canvas.width / sWidth * 0.75 * 20;
 let ay = canvas.height / 2;
 function drawApple() {
@@ -28,15 +29,16 @@ function drawApple() {
 function drawSnake() {
     for (i = 0; i < score + 1; i++) {
         ctx.beginPath();
-        ctx.rect(snake[i].x, snake[i].y, sWidth, sHeight);
+        ctx.rect(snakeArr[i].x, snakeArr[i].y, sWidth, sHeight);
         ctx.fillStyle = "#00ff00";
         ctx.fill();
         ctx.closePath();
     }
 }
 function aReset() {
-    ax = (Math.floor(Math.random() * (canvas.width / sWidth)) + 1) * 20 - 10;
-    ay = (Math.floor(Math.random() * (canvas.height / sHeight)) + 1) * 20 - 10; 
+    let apos = oTiles[Math.floor(Math.random() * oTiles.length)];
+    ax = apos[0] * 20 + 10;
+    ay = apos[1] * 20 + 10;
 }
 function draw() {
     dirChanged = false;
@@ -58,13 +60,25 @@ function draw() {
         x += sWidth;
     }
     // add collision
-    for (i = snake.length + 1; i > 0; i--) {
+    for (i = snakeArr.length + 1; i > 0; i--) {
         if (i > 450) {
             continue;
         }
-        snake[i] = snake[i - 1];
+        snakeArr[i] = snakeArr[i - 1];
     }
-    snake[0] = {x:x, y:y};
+    snakeArr[0] = {x:x, y:y};
+    // set empty tiles
+    oTiles = [];
+    for (i = 0; i < canvas.width / 20; i++) {
+        for (j = 0; j < canvas.height / 20; j++) {
+            tile = [20 * i, 20 * j];
+            for (k = 0; k < score + 1; k++) {
+                if (tile[0] != snakeArr[k].x && tile[1] != snakeArr[k].y) {
+                    oTiles.push(tile);
+                }
+            }
+        }
+    }
     // death handling/messages
     if (x < 0 || x > canvas.width - sWidth || y < 0 || y == canvas.height) {
         setTimeout(die, 10);
@@ -101,21 +115,21 @@ function keyDownManager(e) {
             moveRight = false;
             dirChanged = true;
         }
-        if (e.key == "Down" || e.key == "s" && !moveUp && !dirChanged || e.key == "ArrowDown" && !moveUp && !dirChanged) {
+        if (e.key == "Down" && !moveUp && !dirChanged || e.key == "s" && !moveUp && !dirChanged || e.key == "ArrowDown" && !moveUp && !dirChanged) {
             moveDown = true;
             moveUp = false;
             moveLeft = false;
             moveRight = false;
             dirChanged = true;
         }
-        if (e.key == "Left" || e.key == "a" && !moveRight && !dirChanged || e.key == "ArrowLeft" && !moveRight && !dirChanged) {
+        if (e.key == "Left" && !moveRight && !dirChanged || e.key == "a" && !moveRight && !dirChanged || e.key == "ArrowLeft" && !moveRight && !dirChanged) {
             moveLeft = true;
             moveDown = false;
             moveUp = false;
             moveRight = false;
             dirChanged = true;
         }
-        if (e.key == "Right" || e.key == "d" && !moveLeft && !dirChanged || e.key == "ArrowRight" && !moveLeft && !dirChanged) {
+        if (e.key == "Right" && !moveLeft && !dirChanged || e.key == "d" && !moveLeft && !dirChanged || e.key == "ArrowRight" && !moveLeft && !dirChanged) {
             moveRight = true;
             moveDown = false;
             moveLeft = false;
