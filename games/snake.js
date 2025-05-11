@@ -12,7 +12,6 @@ let moveLeft = false;
 let moveRight = false;
 let oTiles;
 let score = 0;
-let sKey;
 let paused = false;
 let x = 100;
 let y = canvas.height / 2 - sHeight / 2;
@@ -37,8 +36,20 @@ function drawSnake() {
 }
 function aReset() {
     let apos = oTiles[Math.floor(Math.random() * oTiles.length)];
-    ax = apos[0] * 20 + 10;
-    ay = apos[1] * 20 + 10;
+    ax = apos[0] + 10;
+    ay = apos[1] + 10;
+}
+function die() {
+    if (score > highScore) {
+        newHS = true;
+        highScore = score;
+        localStorage.setItem("highScore", String(score));
+        alert("GAME OVER\nNEW HIGH SCORE: " + String(score));
+    } else {
+        alert("GAME OVER\nScore: " + String(score) + "\nHigh Score: " + String(highScore));
+    }
+    document.location.reload();
+    clearInterval(interval);
 }
 function draw() {
     dirChanged = false;
@@ -46,7 +57,6 @@ function draw() {
     drawApple();
     drawSnake();
     // movement
-    sKey = undefined;
     if (moveUp) {
         y -= sHeight;
     }
@@ -59,7 +69,7 @@ function draw() {
     if (moveRight) {
         x += sWidth;
     }
-    // add collision
+    // save previous positions
     for (i = snakeArr.length + 1; i > 0; i--) {
         if (i > 450) {
             continue;
@@ -80,20 +90,15 @@ function draw() {
         }
     }
     // death handling/messages
+    // collide with self
+    for (i = 1; i <= score; i++) {
+        if (x == snakeArr[i].x && y == snakeArr[i].y) {
+            setTimeout(die, 10);
+        }
+    }
+    // collide with wall
     if (x < 0 || x > canvas.width - sWidth || y < 0 || y == canvas.height) {
         setTimeout(die, 10);
-        function die() {
-            if (score > highScore) {
-                newHS = true;
-                highScore = score;
-                localStorage.setItem("highScore", String(score));
-                alert("GAME OVER\nNEW HIGH SCORE: " + String(score));
-            } else {
-                alert("GAME OVER\nScore: " + String(score) + "\nHigh Score: " + String(highScore));
-            }
-            document.location.reload();
-            clearInterval(interval);
-        }
     }
     // apple collision
     if (ax - sWidth / 2 == x && ay - sHeight / 2 == y) {
@@ -105,39 +110,33 @@ document.addEventListener("keydown", keyDownManager, false);
 // fix caps input
 function keyDownManager(e) {
     if (!paused) {
-        if (sKey != undefined) {
-            e.key = sKey;
-        }
-        if (e.key == "Up" && !moveDown && !dirChanged || e.key == "w" && !moveDown && !dirChanged || e.key == "ArrowUp" && !moveDown && !dirChanged) {
+        if (e.key == "Up" && !moveDown && !dirChanged || e.key.toLowerCase() == "w" && !moveDown && !dirChanged || e.key == "ArrowUp" && !moveDown && !dirChanged) {
             moveUp = true;
             moveDown = false;
             moveLeft = false;
             moveRight = false;
             dirChanged = true;
         }
-        if (e.key == "Down" && !moveUp && !dirChanged || e.key == "s" && !moveUp && !dirChanged || e.key == "ArrowDown" && !moveUp && !dirChanged) {
+        if (e.key == "Down" && !moveUp && !dirChanged || e.key.toLowerCase() == "s" && !moveUp && !dirChanged || e.key == "ArrowDown" && !moveUp && !dirChanged) {
             moveDown = true;
             moveUp = false;
             moveLeft = false;
             moveRight = false;
             dirChanged = true;
         }
-        if (e.key == "Left" && !moveRight && !dirChanged || e.key == "a" && !moveRight && !dirChanged || e.key == "ArrowLeft" && !moveRight && !dirChanged) {
+        if (e.key == "Left" && !moveRight && !dirChanged || e.key.toLowerCase() == "a" && !moveRight && !dirChanged || e.key == "ArrowLeft" && !moveRight && !dirChanged) {
             moveLeft = true;
             moveDown = false;
             moveUp = false;
             moveRight = false;
             dirChanged = true;
         }
-        if (e.key == "Right" && !moveLeft && !dirChanged || e.key == "d" && !moveLeft && !dirChanged || e.key == "ArrowRight" && !moveLeft && !dirChanged) {
+        if (e.key == "Right" && !moveLeft && !dirChanged || e.key.toLowerCase() == "d" && !moveLeft && !dirChanged || e.key == "ArrowRight" && !moveLeft && !dirChanged) {
             moveRight = true;
             moveDown = false;
             moveLeft = false;
             moveUp = false;
             dirChanged = true;
-        }
-        if (dirChanged) {
-            sKey = e.key;
         }
     }
     if (e.key == "Escape") {
