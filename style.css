@@ -1,22 +1,26 @@
 html {
     font-family: Arial, Helvetica, sans-serif;
-    width: 100%;
     background: #303030;
     color: #f2f2f2;
+    height: 100%;
+}
+body {
+    height: 100%;
 }
 header {
     text-align: center;
     align-items: center;
     height: 70px;
-    display: flex;
+    /* display: flex; */
+    display: inline;
     flex-direction: row;
 }
 h1 {
     text-align: center;
-    font-size: 70px;
+    font-size: 5vw;
     margin: auto;
     margin-top: 20px;
-    width: 500px;
+    width: 40rem;
     float: none;
 }
 div {
@@ -32,7 +36,10 @@ a {
     font-weight: bold;
 }
 img {
-    width: 300px;
+    width: 25%;
+}
+canvas {
+    padding: auto;
 }
 .logo {
     width: 90px;
@@ -40,10 +47,10 @@ img {
 }
 .logoA {
     margin-top: 35px;
-    width: 90px;
+    width: 70px;
 }
 .tetris {
-    background: #66f;
+    background: #44f;
 }
 .snake {
     background: #000;
@@ -58,12 +65,10 @@ img {
 @media (max-width: 800px) {
     header {
         flex-direction: column;
+        display: block;
     }
     .logo {
         float: none;
-    }
-    .logoA {
-        margin: auto;
     }
     .br {
         display: block;
